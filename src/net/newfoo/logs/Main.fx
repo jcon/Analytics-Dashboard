@@ -56,7 +56,8 @@ def GRAPH_WIDTH = 650;
 def GOOGLE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 def GRAPH_FORMAT = new SimpleDateFormat("MM/dd");
 
-class Main {
+
+public class Main {
     var client: AnalyticsClient;
 
     var loginController: LoginController = LoginController {
@@ -202,15 +203,17 @@ class Main {
 
 }
 
-var main = Main{ };
-Stage {
-    title: "Analytics Dashboard"
-    scene: Scene {
-        width: WINDOW_WIDTH
-        height: WINDOW_HEIGHT
-        content: [
-            main.ui,
-        ]
+public function run() {
+    var main = Main{ };
+    Stage {
+        title: "Analytics Dashboard"
+        scene: Scene {
+            width: WINDOW_WIDTH
+            height: WINDOW_HEIGHT
+            content: [
+                main.ui,
+            ]
+        }
     }
 }
 
