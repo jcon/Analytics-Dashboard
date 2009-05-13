@@ -27,22 +27,24 @@ package net.newfoo.logs.analytics.client;
 import com.google.gdata.util.common.base.Pair;
 import java.util.List;
 
-/**
- *
- * @author jim
- */
 public interface AnalyticsClient {
-
-    List<Site> getSites();
-
-    List<TimeEntry> hits(String start, String end);
-
+    /** Authenticate a user */
     void login(String user, String pass);
 
+    /** After logging in, provide the list of sites to which the
+        user is subscribed. */
+    List<Site> getSites();
+
+    /** Set a valid GA profileID obtained from one of the sites in getSites() */
     void setProfileId(String profileId);
 
+    /** provide a list of hits for a given date range */
+    List<TimeEntry> hits(String start, String end);
+
+    /** list pages ordered by # of visitors for date range */
     List<Pair<String, Long>> topPages(String start, String end);
 
+    /** list referrers ordered by # visits for date range */
     List<Pair<String, Long>> topReferrers(String start, String end);
 
 }

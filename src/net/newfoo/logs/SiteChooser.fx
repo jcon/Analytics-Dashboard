@@ -25,39 +25,54 @@ package net.newfoo.logs;
  */
 
 import javafx.ext.swing.SwingButton;
-import javafx.ext.swing.SwingLabel;
 import javafx.ext.swing.SwingList;
 import javafx.ext.swing.SwingListItem;
 import javafx.scene.CustomNode;
 import javafx.scene.Group;
 import javafx.scene.layout.VBox;
 import javafx.scene.Node;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextOrigin;
 import net.newfoo.logs.analytics.client.Site;
 
 public class SiteChooser extends CustomNode {
+    def LIST_WIDTH = .75;
     public var sites: Site[];
     public-init var action: function(site: String, profileId: String);
 
+    var list:SwingList = SwingList {
+        width: bind parent.boundsInLocal.width * LIST_WIDTH
+        enabled: true
+        items: bind [
+            for (site in sites) {
+                SwingListItem {
+                    text: site.getName()
+                    value: site.getProfileId()
+                }
+            }
+        ]
+
+    };
+
+    override function requestFocus() {
+        list.requestFocus();
+        super.requestFocus();
+    }
+
     public override function create(): Node {
         return Group {
-            var list:SwingList = SwingList {
-                width: bind boundsInLocal.width * .75
-                items: bind [
-                    for (site in sites) {
-                        SwingListItem {
-                            text: site.getName()
-                            value: site.getProfileId()
-                        }
-                    }
-                ]
-            };
+            translateX: bind (parent.boundsInLocal.width * (1 - LIST_WIDTH)) / 2
+            translateY: bind (parent.boundsInLocal.height * (1 - LIST_WIDTH)) / 2
             content: [
                 VBox {
                     content: [
-                        SwingLabel {
-                            text: "Choose Site"
+                        Text {
+                            textOrigin: TextOrigin.TOP
+                            fill: Color.WHITE
+                            content: "Choose Site"
                             font: Font.font("Georgia", FontWeight.BOLD, 24)
                         },
                         list,

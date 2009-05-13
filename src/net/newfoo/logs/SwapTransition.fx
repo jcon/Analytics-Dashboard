@@ -54,6 +54,7 @@ public class SwapTransition extends ParallelTransition {
     override var action = function() {
         outNode.visible = false;
         outNode.opacity = 1;
+        inNode.toFront();
     }
 
 }

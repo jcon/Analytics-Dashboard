@@ -106,7 +106,7 @@ public class LoginForm extends CustomNode {
     public override function create(): Node {
         return Group {
             content: [
-                Rectangle {
+/*                Rectangle {
                     width: bind width
                     height: bind height
                     fill: LinearGradient {
@@ -126,7 +126,7 @@ public class LoginForm extends CustomNode {
                             }
                           ]
                     }
-                },
+                }, */
                 MigLayout {
                     //              fitParent: true
                     width: bind width

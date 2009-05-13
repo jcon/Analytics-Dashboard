@@ -24,17 +24,25 @@ package net.newfoo.logs;
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
+import javafx.scene.shape.Rectangle;
 import net.newfoo.logs.analytics.client.AnalyticsClient;
-import net.newfoo.logs.analytics.client.GdataAnalyticsClient;
 import net.newfoo.logs.analytics.client.AnalyticsException;
+import net.newfoo.logs.analytics.client.FakeAnalyticsClient;
+import net.newfoo.logs.analytics.client.GdataAnalyticsClient;
 import net.newfoo.logs.analytics.client.Site;
 import net.newfoo.logs.LoginForm;
 import net.newfoo.logs.SiteChooser;
-import javafx.scene.Group;
-import net.newfoo.logs.analytics.client.FakeAnalyticsClient;
+import net.newfoo.logs.SwapTransition;
 
 public class LoginController {
+    var height = 300;
+    var width = 400;
+    
     public-init var afterLogin: function(client: AnalyticsClient, site: String);
     public-read var content: Node;
     var client: AnalyticsClient;
@@ -50,8 +58,8 @@ public class LoginController {
         }
     };
     var loginForm: LoginForm = LoginForm {
-        height: 300
-        width: 400
+        height: height
+        width: width
         visible: false
         action: function(username, password) {
             client = GdataAnalyticsClient{ };
@@ -83,6 +91,27 @@ public class LoginController {
             translateX: bind content.boundsInLocal.minX - (content.parent.boundsInLocal.width - content.boundsInLocal.width) / 2;
             translateY: bind content.boundsInLocal.minY - (content.parent.boundsInLocal.height - content.boundsInLocal.height) / 2;
             content: [
+                Rectangle {
+                    width: bind width
+                    height: bind height
+                    fill: LinearGradient {
+                        endX: 0.0
+                        stops: [
+                            Stop {
+                                offset: 0.0
+                                color: Color.rgb(0x22, 0x37, 0x4c, 1.0)
+                            },
+                            Stop {
+                                offset: 0.5
+                                color: Color.rgb(0x22, 0x37, 0x4c, 0.74590164)
+                            },
+                            Stop {
+                                offset: 1.0
+                                color: Color.rgb(0x22, 0x37, 0x4c, 1.0)
+                            }
+                          ]
+                    }
+                },
                 siteChooser,
                 loginForm
             ]
@@ -96,10 +125,12 @@ public class LoginController {
         loginForm.visible = true;
         loginForm.opacity = 1;
         loginForm.requestFocus();
+        delete sites;
     }
 
     public function showSiteChooser() {
         siteChooser.visible = true;
+        siteChooser.requestFocus();
         var trans = SwapTransition {
             inNode: siteChooser
             outNode: loginForm
