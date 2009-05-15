@@ -143,30 +143,35 @@ public class Chart {
                 for (i in [1 .. maxY]) {
                     var visible = (yIncrement > 180 or
                                     i mod ((180 / yIncrement) as Integer) == 0);
-                    var line = Line {
-                        startX: x + padding
-                        startY: y + (height - i * yIncrement)
-                        endX: bind x + width
-                        endY: y + (height - i * yIncrement)
-                        visible: visible
-                        stroke: Color.rgb(55, 55, 55)
-                        strokeWidth: 3
-                        strokeDashArray: [1, 12]
-                    };
-                    var text: Text = Text {
-                        fill: labelColor;
-                        font: labelFont
-                        translateX: bind -1 * (text.boundsInLocal.width + padding)
-                        translateY: bind -1 * text.boundsInLocal.height / 2
-                        x: x
-                        y: y + (height - i * yIncrement)
-                        content: "{i}"
-                        textAlignment: TextAlignment.RIGHT
-                        textOrigin: TextOrigin.TOP
-                        visible: visible
-                    };
+                    if (visible) {
+                        var line = Line {
+                            startX: x + padding
+                            startY: y + (height - i * yIncrement)
+                            endX: bind x + width
+                            endY: y + (height - i * yIncrement)
+                            visible: visible
+                            stroke: Color.rgb(55, 55, 55)
+                            strokeWidth: 3
+                            strokeDashArray: [1, 12]
+                        };
+                        var text: Text = Text {
+                            fill: labelColor;
+                            font: labelFont
+                            translateX: bind -1 * (text.boundsInLocal.width + padding)
+                            translateY: bind -1 * text.boundsInLocal.height / 2
+                            x: x
+                            y: y + (height - i * yIncrement)
+                            content: "{i}"
+                            textAlignment: TextAlignment.RIGHT
+                            textOrigin: TextOrigin.TOP
+                            visible: visible
+                        };
 
-                    [line, text];
+                        [line, text];
+                    } else {
+                        [];
+                    }
+
                 },
             ]
         };

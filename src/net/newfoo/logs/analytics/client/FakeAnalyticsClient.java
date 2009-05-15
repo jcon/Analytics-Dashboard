@@ -45,7 +45,7 @@ public class FakeAnalyticsClient implements AnalyticsClient {
         return new ArrayList<TimeEntry>() {{
             for (int i = 0; i < 7; i++) {
                 calendar.roll(Calendar.DAY_OF_YEAR, -7 + i);
-                add(new TimeEntry(calendar.getTime(), (long)(random() * 100), (long)(random() * 95), (long)(random() * 55)));
+                add(new TimeEntry(calendar.getTime(), (long)(random() * 30000), (long)(random() * 95), (long)(random() * 15000)));
             }
         }};
     }
