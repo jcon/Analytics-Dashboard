@@ -104,6 +104,14 @@ public class GdataAnalyticsClient implements AnalyticsClient {
         return hits;
     }
 
+    public List<TimeEntry> hits(String date) {
+        List<TimeEntry> hits = new ArrayList<TimeEntry>();
+        for (DataEntry entry : query(date, null, "ga:hour", "ga:visits,ga:bounces,ga:newVisits", "ga:hour")) {
+            hits.add(new TimeEntry(Integer.parseInt(entry.stringValueOf("ga:hour")), entry.longValueOf("ga:visits"), entry.longValueOf("ga:newVisits"), entry.longValueOf("ga:bounces")));
+        }
+        return hits;
+    }
+
     public List<Pair<String, Long>> topPages(String start, String end) {
         List<DataEntry> entries = query(start, end, "ga:pageTitle", "ga:pageviews", "-ga:pageviews");
         List<Pair<String, Long>> items = new ArrayList<Pair<String, Long>>();
@@ -140,7 +148,11 @@ public class GdataAnalyticsClient implements AnalyticsClient {
         query.setSort(sortOrder);
         query.setMaxResults(100);
         query.setStartDate(start);
-        query.setEndDate(end);
+        if (end != null) {
+            query.setEndDate(end);
+        } else {
+            query.setEndDate(start);
+        }
         URL url = query.getUrl();
         System.out.println("URL: " + url.toString());
 

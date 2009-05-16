@@ -1,7 +1,7 @@
 package net.newfoo.logs;
 /*
  * Copyright (c) 2009 Jim Connell
- * 
+ *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
  * files (the "Software"), to deal in the Software without
@@ -10,10 +10,10 @@ package net.newfoo.logs;
  * copies of the Software, and to permit persons to whom the
  * Software is furnished to do so, subject to the following
  * conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -25,9 +25,12 @@ package net.newfoo.logs;
  */
 
 import java.awt.event.ActionEvent;
+import java.lang.Class;
 import java.lang.Object;
+import java.util.prefs.Preferences;
 import javafx.animation.transition.FadeTransition;
 import javafx.ext.swing.SwingButton;
+import javafx.ext.swing.SwingCheckBox;
 import javafx.ext.swing.SwingComponent;
 import javafx.ext.swing.SwingLabel;
 import javafx.ext.swing.SwingTextField;
@@ -38,7 +41,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.Scene;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -56,11 +58,29 @@ import org.jfxtras.stage.JFXDialog;
 
 class RequestFocus extends AbstractAction {
     var node: SwingComponent;
-    
+
     function actionPerformed(event: ActionEvent) {
         node.requestFocus();
     }
 }
+
+class LoginPreferences {
+    var prefs: Preferences;
+    def USERNAME = "user.name";
+    
+    init {
+       prefs = Preferences.userRoot().node("/net/newfoo/logs/login");
+    }
+
+    public function getUser() {
+        prefs.get(USERNAME, null);
+    }
+
+    public function setUser(u: String) {
+        prefs.put(USERNAME, u);
+    }
+}
+
 
 public class LoginForm extends CustomNode {
     public-init var action: function(username: String, password: String);
@@ -68,6 +88,8 @@ public class LoginForm extends CustomNode {
     public var height: Number = 200;
     public var width: Number = 300;
     public var errorMessage: String;
+
+    var prefs = LoginPreferences{ };
 
     var username: SwingTextField = SwingTextField {
         action: function() {
@@ -80,10 +102,18 @@ public class LoginForm extends CustomNode {
         });
     }
 
+    var rememberPassword: SwingCheckBox = SwingCheckBox {
+
+    };    
+
     var loginButton = SwingButton {
         text: "Login"
         action: function() {
             if (action != null) {
+                if (rememberPassword.selected) {
+                    prefs.setUser(username.text);
+                }
+
                 action(username.text, new String(password.getPassword()));
             }
         }
@@ -100,6 +130,15 @@ public class LoginForm extends CustomNode {
 
     override function requestFocus() {
         username.requestFocus();
+    }
+
+    init {
+        var u = prefs.getUser();
+        if (u != null) {
+            username.text = u;
+            rememberPassword.selected = true;
+        }
+
     }
 
 
@@ -132,7 +171,7 @@ public class LoginForm extends CustomNode {
                     width: bind width
                     height: bind height
                     layout: "fill, wrap"
-                    rows: "push[]8px[][][]4px[]push"
+                    rows: "push[]8px[][][][]4px[]push"
                     columns: "[][]"
 
                     migContent: [
@@ -175,6 +214,18 @@ public class LoginForm extends CustomNode {
                         MigNode {
                             node: SwingComponent.wrap(password)
                             constraints: "growx"
+                        },
+
+                        MigNode {
+                            node: rememberPassword
+                            constraints: "ax right"
+                        },
+                        MigNode {
+                            node: SwingLabel {
+                                foreground: Color.WHITE
+                                text: "Remember Username?"
+                            }
+                            constraints: "ax left"
                         },
                         MigNode {
                             node: loginButton
@@ -277,7 +328,7 @@ public function run() {
                                     }
                                 }
                             }
-                        } 
+                        }
                         var dialog: LoginForm = LoginForm {
                             action: function(username, password) {
                                 println("{username}/{password} submitted");

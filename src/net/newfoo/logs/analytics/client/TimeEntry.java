@@ -28,6 +28,7 @@ import java.util.Date;
 
 public class TimeEntry {
     private Date date;
+    private Integer hour;
     private Long visits;
     private Long newVisits;
     private Long bounces;
@@ -39,12 +40,23 @@ public class TimeEntry {
         this.bounces = bounces;
     }
 
+    public TimeEntry(Integer hour, Long visits, Long newVisits, Long bounces) {
+        this.hour = hour;
+        this.visits = visits;
+        this.newVisits = newVisits;
+        this.bounces = bounces;
+    }
+
     public Long getBounces() {
         return bounces;
     }
 
     public Date getDate() {
         return date;
+    }
+
+    public Integer getHour() {
+        return hour;
     }
 
     public Long getVisits() {

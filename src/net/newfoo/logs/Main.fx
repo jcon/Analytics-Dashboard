@@ -68,9 +68,7 @@ public class Main {
         login: loginController.showLogin
     };
 
-
-    var sites: Site[];
-
+    var site;
 
     public-read var ui: Node[] = bind [
         dashboard.ui,
@@ -78,7 +76,7 @@ public class Main {
     ];
 
     function afterLogin(client: AnalyticsClient, site: String) {
-
+        this.site = site;
         this.client = client;
 
         var range = getDateRange();
@@ -118,7 +116,7 @@ public class Main {
 
     function refresh(start: String, end: String): Void {
         println("refresh({start}, {end})");
-        dashboard.chart.title = "newfoo.net  {formatDate(start)}-{formatDate(end)}";
+        dashboard.chart.title = "{site} {formatDate(start)}-{formatDate(end)}";
         dashboard.chart.items = createDataSet(start, end);
         dashboard.topPages.values = createTopPages(start, end);
         dashboard.topReferrers.values = createTopReferrers(start, end);

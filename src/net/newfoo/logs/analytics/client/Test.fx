@@ -24,13 +24,13 @@ package net.newfoo.logs.analytics.client;
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import javafx.scene.paint.Color;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import net.newfoo.logs.analytics.client.GdataAnalyticsClient;
 import net.newfoo.logs.analytics.client.AnalyticsException;
+import net.newfoo.logs.analytics.client.GdataAnalyticsClient;
 import net.newfoo.logs.analytics.client.Site;
 import net.newfoo.logs.LoginForm;
-import net.newfoo.logs.SiteChooser;
 
 var v = GdataAnalyticsClient{
 };
@@ -74,25 +74,32 @@ var sitesGroup: Group = Group {
         }
     ]
 }; */
-
+/*
 var sitesGroup: SiteChooser = SiteChooser {
     visible: false;
     sites: bind sites
     action: function(site: String, profileId: String) {
         println("site {site} with {profileId} profileId choosen");
     }
-};
+}; */
 
 
 var login: LoginForm = LoginForm {
     action: function(username: String, password: String) {
         try {
             v.login(username, password);
-            for (s in v.getSites()) {
+/*            for (s in v.getSites()) {
                 insert s into sites;
+            } */
+            v.setProfileId(v.getSites().get(0).getProfileId());
+            var hits = v.hits("2009-05-14");
+            var i = 0;
+            for (hit in hits) {
+                println("{i++}: {hit.getVisits()}");
             }
-            login.visible = false;
-            sitesGroup.visible = true;
+
+    //        login.visible = false;
+       //     sitesGroup.visible = true;
         } catch (ae:AnalyticsException) {
             login.errorMessage = "Invalid Username/Password";
         }
@@ -103,10 +110,11 @@ var login: LoginForm = LoginForm {
 Stage {
     title : "GA Login Test"
     scene: Scene {
+        fill: Color.BLACK
         width: 400
         height: 400
         content: [
-            sitesGroup,
+        //    sitesGroup,
             login
         ]
     }
