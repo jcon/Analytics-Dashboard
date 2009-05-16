@@ -1,0 +1,44 @@
+h1. Analytics Dashboard
+
+A Google Analytics dashboard written in JavaFX.  This dashboard aims to provide a mashup of data available from Google Analytics in forms that are not currently available on the Google Analytics site and/or difficult to produce using custom reports. 
+
+The latest stable build of the dashboard can be found "here":http://newfoo.net/2009/05/AnalyticsDashboard/AnalyticsDashboard.jnlp.
+
+h2. Before Hacking Away
+
+If you'd like to contribute, you should at least have the following software available:
+
+* "JDK 1.6":http://java.sun.com
+* "JavaFX 1.1":http://www.javafx.com
+* "JavaFX 1.1 Production Suite":http://www.javafx.com
+* "InkScape":http://www.inkscape.org/download (for modifying the graphical design)
+
+Optionally, the following software may make it easier for you to develop against:
+
+* "NetBeans IDE 6.5.1":http://www.javafx.com for JavaFX
+
+h2. Planned Features
+
+h3. Near Future
+
+* Ability to show long pages top pages & referrer tables
+* Paging mechanism for daily view
+* Switch between hourly & daily view
+* Bar chart showing top referrers for top pages for period
+* Bar chart showing top pages for top referrers for period
+* Ability to compare time on site for each page / referrer for period
+
+h3. Later Releases
+
+* Integration with other services pertaining to a sites such as:
+** FeedBurner stats
+** Google Webmaster tools
+
+h2. Release Notes
+
+h3. Release 0.2 (2009-05-15)
+
+* Fixed bug preventing sites with thousands hits/day from loading
+* Title now shows site selected by user or the default site if user is only registered for one site.
+* Added a busy cursor for data refreshes
+* Added ability to remember username for the login form
