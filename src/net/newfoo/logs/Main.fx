@@ -24,12 +24,13 @@ package net.newfoo.logs;
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import java.lang.Object;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import javafx.animation.transition.FadeTransition;
 import javafx.geometry.*;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.LinearGradient;
@@ -37,25 +38,19 @@ import javafx.scene.paint.Stop;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import net.newfoo.logs.analytics.client.AnalyticsClient;
-import net.newfoo.logs.analytics.client.AnalyticsException;
-import net.newfoo.logs.analytics.client.GdataAnalyticsClient;
-import net.newfoo.logs.analytics.client.Site;
 import net.newfoo.logs.chart.DataSet;
-import net.newfoo.logs.LoginForm;
-import net.newfoo.logs.SiteChooser;
+import net.newfoo.logs.LoginController;
 import net.newfoo.logs.StatsValue;
+import net.newfoo.logs.SwapTransition;
 import net.newfoo.logs.ui.AnalyticsDashboardAdapter;
-import javafx.scene.shape.Rectangle;
 
 def WINDOW_HEIGHT = 560;
 def WINDOW_WIDTH = 870;
 def GRAPH_HEIGHT = 500;
 def GRAPH_WIDTH = 650;
 
-
 def GOOGLE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 def GRAPH_FORMAT = new SimpleDateFormat("MM/dd");
-
 
 public class Main {
     var client: AnalyticsClient;
@@ -68,6 +63,7 @@ public class Main {
         login: loginController.showLogin
     };
 
+    var cursor: Cursor = Cursor.DEFAULT;
     var site;
 
     public-read var ui: Node[] = bind [
@@ -116,10 +112,12 @@ public class Main {
 
     function refresh(start: String, end: String): Void {
         println("refresh({start}, {end})");
+        cursor = Cursor.WAIT;
         dashboard.chart.title = "{site} {formatDate(start)}-{formatDate(end)}";
         dashboard.chart.items = createDataSet(start, end);
         dashboard.topPages.values = createTopPages(start, end);
         dashboard.topReferrers.values = createTopReferrers(start, end);
+        cursor = Cursor.DEFAULT;
     }
 
     function formatDate(date: String) {
@@ -206,6 +204,7 @@ public function run() {
     Stage {
         title: "Analytics Dashboard"
         scene: Scene {
+            cursor: bind main.cursor
             width: WINDOW_WIDTH
             height: WINDOW_HEIGHT
             content: [
